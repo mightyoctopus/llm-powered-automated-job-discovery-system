@@ -1,0 +1,95 @@
+from typing import List, Tuple
+import json
+from openai import OpenAI
+
+
+class QueryAgent:
+    """
+    Generate search operators and semantic search queries for web search APIs
+    """
+
+    system_message = """
+                You specialize in crafting best and most efficient google search operators that work well.
+                The prompt you generate will be used as queries for Exa and SerpAPI web search later on.
+            """.strip()
+
+    user_prompt = """
+            Generate search queries for my job search.
+
+            Requirements:
+            - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering including frontier and open-source Hugging Face models.
+            - The role must be remote-friendly for someone working from South Korea.
+            - Junior, mid-level, internship are preferred. Senior roles are still acceptable if realistic for a 3-year-experience developer.
+            - First 10 queries must be formatted for the google search operator style for SERP queries, and the next 10 queries are semantic search queries for Exa query style 
+            - Output exactly this JSON schema:
+
+            {
+              "serp": ["... exactly 10 strings ..."],
+              "exa": ["... exactly 10 strings ..."]
+            }
+
+            Rules:
+            - Return only raw JSON.
+            - No markdown fences.
+            - No explanation.
+            - Each list must contain exactly 10 strings.
+            """.strip()
+
+    def __init__(self, openai: OpenAI):
+        self.client = openai
+        self._queries = None # to use cached queries as best as possible (to avoid duplicate LLM calls)
+
+    def call_llm(self):
+        """
+        Invoke OpenAI and generate LLM responses
+        :return: raw search operator queries
+        """
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-5-mini",
+                messages=[
+                    {"role": "system", "content": self.system_message},
+                    {"role": "user", "content": self.user_prompt}
+                ]
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            raise RuntimeError(f"LLM call failed: {e}")
+
+
+    def process_response(self) -> Tuple[List[str], List[str]]:
+        """
+        load the LLM JSON response and separate each key (ser, exa) for easier process on SerpAPI and Exa individually.
+        """
+
+        try:
+            llm_res = self.call_llm()
+            data = json.loads(llm_res)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse LLM JSON response: {e}\n")
+
+        serp = data.get("serp")
+        exa = data.get("exa")
+
+        if not isinstance(serp, list) or not isinstance(exa, list):
+            raise ValueError(f"Response must contain 'serp' and 'exa' as lists.\nRaw response: {llm_res}")
+
+        if len(serp) != 10 or len(exa) != 10:
+            raise ValueError(
+                f"Expected exactly 10 serp and 10 exa queries, got serp={len(serp)}, exa={len(exa)}."
+            )
+
+        return serp, exa
+
+
+    # Cache result and avoid calling LLM duplicate
+    def get_queries(self):
+        """
+        Use case: serp, exa = query_agent.get_queries()
+        """
+        if self._queries is None:
+            self._queries = self.process_response()
+
+        return self._queries
+
