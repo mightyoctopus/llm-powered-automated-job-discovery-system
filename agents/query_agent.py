@@ -35,10 +35,10 @@ class QueryAgent:
                 - It must not target specific job boards like LinkedIn, Indeed etc. It must be queries that search for companies' direct hiring page or ATS including GreenHouse, Lever, Workable or anything that tends to have static HTML for easy web scraping with BS4 
                 - Output exactly this JSON schema:
 
-                {
+                {{
                   "serp": ["... exactly {self.num_queries} strings ..."],
                   "exa": ["... exactly {self.num_queries} strings ..."]
-                }
+                }}
 
                 Rules:
                 - Return only raw JSON.
