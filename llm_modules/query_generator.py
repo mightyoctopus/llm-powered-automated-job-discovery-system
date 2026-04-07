@@ -2,7 +2,7 @@ from typing import List, Tuple
 import json
 
 
-class QueryAgent:
+class QueryGenerator:
     """
     Generate search operators and semantic search queries for web search APIs
     """

@@ -6,13 +6,13 @@ from openai import OpenAI
 import serpapi
 from exa_py import Exa
 
-from agents.query_agent import QueryAgent
+from llm_modules.query_generator import QueryGenerator
 from services.search_service import SearchService
 
 @dataclass
 class JobPipeline:
     """
-    Orchestrate the main workflow of LLM agents and functions for the job discovery automation
+    Orchestrate the main workflow of LLM llm_modules and functions for the job discovery automation
     """
 
     load_dotenv()
@@ -30,7 +30,7 @@ class JobPipeline:
         client = OpenAI()
         print(f"OpenAI model was loaded successfully: {client}")
 
-        query_agent = QueryAgent(client)
+        query_agent = QueryGenerator(client)
         serp_queries, exa_queries = query_agent.get_queries()
 
         print(f"SERP Len: {len(serp_queries)} | Queries: {serp_queries}")
