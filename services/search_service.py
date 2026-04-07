@@ -19,19 +19,23 @@ class SearchService:
 
         all_results = []
         for i, q in enumerate(self.serp_queries):
-            response = self.serp_client.search({
-                "engine": "google",
-                "google_domain": "google.com",
-                "hl": "en",
-                "q": q
-            })
+            try:
+                response = self.serp_client.search({
+                    "engine": "google",
+                    "google_domain": "google.com",
+                    "hl": "en",
+                    "q": q
+                })
 
-            all_results.extend([
-                {**item, "searched_via": "serp"}
-                for item in response.get("organic_results", [])
-            ])
-            print(f"SerpAPI Search Interation {i + 1} Finished")
-            time.sleep(1)
+                all_results.extend([
+                    {**item, "searched_via": "serp"}
+                    for item in response.get("organic_results", [])
+                ])
+                print(f"SerpAPI Search Iteration {i + 1} Finished")
+                time.sleep(1)
+            except Exception as e:
+                print(f"[SerpAPI ERROR] Search Iteration {i + 1} failed: {e}")
+                continue
 
         return all_results
 
@@ -47,25 +51,29 @@ class SearchService:
         all_exa_results = []
 
         for i, q in enumerate(self.exa_queries):
-            response = self.exa_client.search(
-                query=q,
-                type="auto",
-                contents={"highlights": {"max_characters": 4000}},
-                exclude_domains=["linkedin.com", "indeed.com"],
-                exclude_text=["senior"] #Exclude all results that contain text of senior
-            )
-            print(f"Exa Search Iteration {i + 1} Finished")
+            try:
+                response = self.exa_client.search(
+                    query=q,
+                    type="auto",
+                    contents={"highlights": {"max_characters": 4000}},
+                    exclude_domains=["linkedin.com", "indeed.com"],
+                    exclude_text=["senior"] #Exclude all results that contain text of senior
+                )
+                print(f"Exa Search Iteration {i + 1} Finished")
 
-            all_exa_results.extend([
-                {
-                    "title": result.title,
-                    "link": result.url,
-                    "text": result.highlights[0] if result.highlights else None,
-                    "searched_via": "exa"
-                }
-                for result in response.results
-            ])
-            time.sleep(1)
+                all_exa_results.extend([
+                    {
+                        "title": result.title,
+                        "link": result.url,
+                        "text": result.highlights[0] if result.highlights else None,
+                        "searched_via": "exa"
+                    }
+                    for result in response.results
+                ])
+                time.sleep(1)
+            except Exception as e:
+                print(f"[Exa ERROR] Search Iteration {i + 1} failed: {e}")
+                continue
 
         return all_exa_results
 
