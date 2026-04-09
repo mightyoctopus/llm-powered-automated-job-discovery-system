@@ -36,11 +36,11 @@ class WebScraper:
                     print(f"JOB ID {i + 1}: Failed to scrape - {e}")
 
                 # Small random delay (always)
-                time.sleep(random.uniform(1, 2))
+                time.sleep(random.uniform(2.5, 4))
 
                 # Batch pause (longer delay) every 15 jobs
                 if (i + 1) % 15 == 0:
-                    time.sleep(random.uniform(2, 5))
+                    time.sleep(random.uniform(4, 7))
 
             scrapped_jobs.append(job)
 
