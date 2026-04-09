@@ -7,3 +7,4 @@ class Job:
     url: str
     text: Optional[str]
     searched_via: str
+    low_quality: bool = False
