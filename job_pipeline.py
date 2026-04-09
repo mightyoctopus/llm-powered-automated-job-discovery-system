@@ -10,8 +10,9 @@ from llm_modules.query_generator import QueryGenerator
 from services.search_service import SearchService
 from processors.data_normalizer import DataNormalizer
 from processors.job_filter import JobFilter
+from services.web_scraper import WebScraper
 
-@dataclass
+
 class JobPipeline:
     """
     Orchestrate the main workflow of LLM llm_modules and functions for the job discovery automation
@@ -26,7 +27,7 @@ class JobPipeline:
         The main workflow of the app.
         """
 
-        ### Search Query Generator Agent Flow###
+        ###========== Search Query Generator Agent Flow ==========###
         print("The main program started running")
 
         client = OpenAI()
@@ -39,7 +40,7 @@ class JobPipeline:
         print(f"EXA len: {len(exa_queries)} | Queries: {exa_queries}")
 
 
-        ### Web Search APIs Flow###
+        ###========== Web Search APIs Flow ==========###
         if not self.SERP_API_KEY:
             raise ValueError("SerpAPI API key not found in the environment variables")
         if not self.EXA_API_KEY:
@@ -58,15 +59,23 @@ class JobPipeline:
         print("EXA SEARCH RESULTS: ", exa_search_results)
 
 
-        ### Data Normalizer ###
+        ###========== Data Normalizer ==========###
         data_normalizer = DataNormalizer(serp_search_results, exa_search_results)
         # all jobs that were finished being normalized
         total_jobs = data_normalizer.normalize_job_data()
         print("TOTAL JOBS: ", len(total_jobs))
 
 
-        ### Job Filter ###
+        ###========== Job Filter ==========###
         job_filter = JobFilter(total_jobs)
         filtered_jobs = job_filter.filter_jobs()
         print(f"Job has been pre-filtered\nResult: {len(filtered_jobs)} Jobs Remaining")
         print(filtered_jobs)
+
+
+        ### ==========Web Scraper ==========###
+        web_scraper = WebScraper(filtered_jobs)
+        print("Job scraping is in process...")
+        scrapped_jobs = web_scraper.web_scrape()
+        print(f"NUM OF SCRAPPED JOBS: {len(scrapped_jobs)}")
+        print("SCRAPPED JOBS: ", scrapped_jobs)
