@@ -20,10 +20,10 @@ class WebScraper:
         for i, job in enumerate(self.filtered_jobs):
             if not job.text:
                 try:
-                    response = requests.get(job.url, timeout=5)
+                    response = requests.get(job.url, timeout=10)
 
                     if response.status_code != 200:
-                        print(f"JOB ID {i + 1}: Failed with status {response.status_code}")
+                        print(f"JOB ID {i + 1}: Failed with status {response.status_code}\nURL: {job.url}")
                     else:
                         soup = BeautifulSoup(response.text, "lxml")
                         text = soup.get_text(separator="\n\n", strip=True)
@@ -36,11 +36,11 @@ class WebScraper:
                     print(f"JOB ID {i + 1}: Failed to scrape - {e}")
 
                 # Small random delay (always)
-                time.sleep(random.uniform(1, 1.5))
+                time.sleep(random.uniform(1, 2))
 
                 # Batch pause (longer delay) every 15 jobs
                 if (i + 1) % 15 == 0:
-                    time.sleep(random.uniform(2, 3))
+                    time.sleep(random.uniform(2, 5))
 
             scrapped_jobs.append(job)
 
