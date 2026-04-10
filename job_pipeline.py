@@ -11,7 +11,7 @@ from services.search_service import SearchService
 from processors.data_normalizer import DataNormalizer
 from processors.job_filter import JobFilter
 from services.web_scraper import WebScraper
-
+from processors.quality_checker import QualityChecker
 
 class JobPipeline:
     """
@@ -73,9 +73,26 @@ class JobPipeline:
         print(filtered_jobs)
 
 
-        ### ==========Web Scraper ==========###
+        ### ========== Web Scraper ==========###
         web_scraper = WebScraper(filtered_jobs)
         print("Job scraping is in process...")
         scrapped_jobs = web_scraper.web_scrape()
         print(f"NUM OF SCRAPPED JOBS: {len(scrapped_jobs)}")
         print("SCRAPPED JOBS: ", scrapped_jobs)
+
+
+        ###========== Quality Checker ==========###
+        quality_checker = QualityChecker(scrapped_jobs)
+        # mark low_quality = True for jobs with low-quality job description
+        marked_jobs = quality_checker.check_jd_quality()
+        print("Quality check on job descriptions are complete")
+
+        ###========== Decision Routes ==========###
+        valid_jobs = [job for job in marked_jobs if not job.low_quality] # low_quality = False
+        invalid_jobs = [job for job in marked_jobs if job.low_quality]
+
+        recovered_jobs = ["run_browser_automation(invalid_jobs)"] # Implement later
+
+        processed_jobs = valid_jobs + recovered_jobs
+
+
