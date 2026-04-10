@@ -1,8 +1,10 @@
+from typing import List
 from urllib.parse import urlparse
 import random
+from job import Job
 
 
-def no_adjacent_same_domain(jobs, max_attempts=50):
+def no_adjacent_same_domains(jobs: List[Job], max_attempts=50):
     """
     Shuffle jobs to avoid jobs with adjacent domains straight to each other which can cause a throttling with bursty requests to domains (for web-scraping)
     :param jobs: a list of jobs
