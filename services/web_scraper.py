@@ -22,6 +22,10 @@ class WebScraper:
 
         for i, job in enumerate(self.filtered_jobs):
             if not job.text:
+
+                # Time sleep & update prev_domain for the next iteration
+                prev_domain = apply_delay(index=i, job=job, prev_job_domain=prev_domain)
+
                 try:
                     response = requests.get(job.url, timeout=12) # to be safe for slow responses sometimes
 
@@ -38,8 +42,7 @@ class WebScraper:
                 except requests.exceptions.RequestException as e:
                     print(f"JOB ID {i + 1}: Failed to scrape - {e}")
 
-                # Time sleep & update prev_domain for the next iteration
-                prev_domain = apply_delay(index=i, job=job, prev_job_domain=prev_domain)
+
 
             scrapped_jobs.append(job)
 
