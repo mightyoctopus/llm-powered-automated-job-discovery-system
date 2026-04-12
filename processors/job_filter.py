@@ -6,7 +6,7 @@ class JobFilter:
     """
     Internal logic to filter out job data before passing it to the LLM job evaluator
     """
-    EXCLUDING_SITES = ["linkedin.com", "indeed.com", "ziprecruiter.com", "glassdoor.com", "huggingface.co", "github.com"]
+    EXCLUDING_SITES = ["linkedin.com", "indeed.com", "ziprecruiter.com", "glassdoor.com", "huggingface.co", "github.com", "facebook.com"]
     EXCLUDING_WORDS = ["senior", "head", "lead", "principal", "director", "manager"]
     SITES_For_BROWSER_AUTOMATION = ["workable.com"] # Problematic sites for web-scrapping; needed to pass to the LLM auto-browsing logic to handle
 
