@@ -35,7 +35,8 @@ class JobPipeline:
         print(f"OpenAI model was loaded successfully: {client}")
 
         query_agent = QueryGenerator(client)
-        serp_queries, exa_queries = query_agent.get_queries()
+        serp_queries = query_agent.get_queries()["serp"]
+        exa_queries = query_agent.get_queries()["exa"]
 
         print(f"SERP Len: {len(serp_queries)} | Queries: {serp_queries}")
         print(f"EXA len: {len(exa_queries)} | Queries: {exa_queries}")
