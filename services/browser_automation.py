@@ -23,6 +23,7 @@ class BrowserAutomation:
         """
         Internal private method that configures PlayWright initialization
         """
+        print("Browser Automation is starting...")
         p = await async_playwright().start()
         await asyncio.sleep(random.randint(1, 3))
 
@@ -87,7 +88,7 @@ class BrowserAutomation:
             await browser.close()
             await p.stop()
 
-
+        print("Failed Job (JD) recovery has been finished!")
         return self.failed_jobs
 
 
