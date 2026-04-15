@@ -26,6 +26,9 @@ class JobPipeline:
     SERP_API_KEY = os.getenv("SERP_API_KEY")
     EXA_API_KEY = os.getenv("EXA_API_KEY")
 
+    def __init__(self, num_queries=3):
+        self.num_queries = num_queries
+
     async def run(self):
         """
         The main workflow of the app.
@@ -33,7 +36,7 @@ class JobPipeline:
 
         ###========== Search Query Generator Agent Flow ==========###
         print("The main program started running")
-        query_agent = QueryGenerator()
+        query_agent = QueryGenerator(num_queries=self.num_queries)
         serp_queries = query_agent.get_queries()["serp"]
         exa_queries = query_agent.get_queries()["exa"]
 

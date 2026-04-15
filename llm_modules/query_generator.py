@@ -13,7 +13,7 @@ class QueryGenerator:
                 The prompt you generate will be used as queries for Exa and SerpAPI web search later on.
             """.strip()
 
-    def __init__(self, num_queries: int = 3):
+    def __init__(self, num_queries):
         self.client = OpenAI()
         self.num_queries = num_queries
         self._queries = None # to use cached queries as best as possible (to avoid duplicate LLM calls)
