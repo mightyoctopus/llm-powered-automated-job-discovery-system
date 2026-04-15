@@ -111,3 +111,5 @@ class JobPipeline:
         job_evaluator = JobEvaluator(final_input_jobs)
         final_job_results = await job_evaluator.run_job_evaluations()
 
+        print("FINAL RESULTS: ", final_job_results)
+
