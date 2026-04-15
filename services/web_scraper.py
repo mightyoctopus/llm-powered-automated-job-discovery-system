@@ -27,6 +27,7 @@ class WebScraper:
                 prev_domain = apply_delay(index=i, job=job, prev_job_domain=prev_domain)
 
                 try:
+                    print(f"Job {i} is being scrapped...")
                     response = requests.get(job.url, timeout=12) # to be safe for slow responses sometimes
 
                     if response.status_code != 200:
