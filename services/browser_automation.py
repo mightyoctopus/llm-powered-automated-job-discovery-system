@@ -39,50 +39,56 @@ class BrowserAutomation:
         """
 
         p, browser, page = await self._init_browser()
-
         try:
             for failed_job in self.failed_jobs:
-                await page.goto(failed_job.url, timeout=30000)
-                # Wait for JS rendering and dynamic DOM to load
-                await page.wait_for_load_state("networkidle")
+                try:
+                    await page.goto(failed_job.url, timeout=30000)
+                    # Wait for JS rendering and dynamic DOM to load
+                    await page.wait_for_load_state("domcontentloaded")
+                    await asyncio.sleep(2)
 
-                html = await page.content()
+                    html = await page.content()
 
-                if html:
-                    soup = BeautifulSoup(html, "lxml")
-                    footer = soup.find("footer")
+                    if html:
+                        soup = BeautifulSoup(html, "lxml")
+                        footer = soup.find("footer")
 
-                    # Remove footer
-                    if footer:
-                        footer.decompose()
+                        # Remove footer
+                        if footer:
+                            footer.decompose()
 
-                    # Remove junk tags
-                    for tag in soup.find_all(["nav", "aside"]):
-                        tag.decompose()
+                        # Remove junk tags
+                        for tag in soup.find_all(["nav", "aside"]):
+                            tag.decompose()
 
 
-                    ### Remove the other messy HTML elements by classes and IDs
-                    ### Commented this out because this filters out all content sometimes
+                        ### Remove the other messy HTML elements by classes and IDs
+                        ### Commented this out because this filters out all content sometimes
 
-                    # keywords = ["footer", "cookie", "privacy", "nav", "menu", "header"]
-                    # for tag in list(soup.find_all(True)):
+                        # keywords = ["footer", "cookie", "privacy", "nav", "menu", "header"]
+                        # for tag in list(soup.find_all(True)):
 
-                    #     if not isinstance(tag, Tag) or tag.attrs is None:
-                    #         continue
+                        #     if not isinstance(tag, Tag) or tag.attrs is None:
+                        #         continue
 
-                    #     classes = " ".join(tag.get("class", []))
-                    #     id_ = tag.get("id", "")
+                        #     classes = " ".join(tag.get("class", []))
+                        #     id_ = tag.get("id", "")
 
-                    #     combined = f"{classes} {id_}".lower()
+                        #     combined = f"{classes} {id_}".lower()
 
-                    #     if any(keyword in combined for keyword in keywords):
-                    #         tag.decompose()
+                        #     if any(keyword in combined for keyword in keywords):
+                        #         tag.decompose()
 
-                    text = soup.get_text(separator="\n\n", strip=True)
-                    if text:
-                        failed_job.text = text
+                        text = soup.get_text(separator="\n\n", strip=True)
+                        if text:
+                            failed_job.text = text
 
-                await asyncio.sleep(random.randint(3, 8))
+                    await asyncio.sleep(random.randint(3, 8))
+
+                except Exception as e:
+                    print(f"Error occurred while browsing {failed_job.url}: {e}")
+                    failed_job.manual_check_required = True
+                    continue
 
         finally:
             await browser.close()
