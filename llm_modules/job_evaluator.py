@@ -29,7 +29,7 @@ class JobEvaluator:
         """.strip()
 
         base_user_prompt = """
-            You should filter out irrelevant jobs and only pick out the best jobs that fit theese conditions:
+            You should filter out irrelevant jobs and only pick out the best jobs that fit these conditions:
 
             - They must be an AI engineer jobs (LLM Engineering, RAG, AI Agents, Agentic Systems, LoRA/QLoRA, Machine Learning or any jobs relevant in AI engineering). Otherwise keep=False.
             - they MUST be remote roles that are available for the global/worldwide regions, Asia, or South Korea. Otherwise keep=False.
@@ -39,7 +39,7 @@ class JobEvaluator:
             - The job MUST be accessible to a candidate residing in South Korea.
 
             - Accept if:
-              - Remote worldwide / global / work from anywhere (with no spefcific regional restrcition)
+              - Remote worldwide / global / work from anywhere (with no specific regional restriction)
               - Remote APAC / Asia (explicitly includes multiple countries, not a single country)
               - Remote with no location restriction
 
@@ -71,17 +71,17 @@ class JobEvaluator:
               → set manual_check_required = True
 
             - If NO location mentioned or unclear:
-              → set is_remote_ok = True
               → set keep = True
 
-            - If you are cofnsued:
+            - If you are confused:
               → set manual_check_required = True
 
 
             3. OTHER RULES:
             - Reject jobs that are not clearly AI engineering roles
             - Reject non-job pages like blog posts, listings, forums, Github repos etc
-            - If the job description is missing or unclear and if it might be possible for remote South Korea, mark manual_check_required = True
+            - If the job description text is missing or extremely insufficient text length, mark manual_check_required = True and keep=False
+            - Also, if the job is confusing or unclear for the remote work availability for South Korea, BUT it might be possible to be available for the region, then mark manual_check_required = True and keep=False 
 
 
             4. TIMEZONE / WORK HOURS MATCH RULES:
@@ -94,11 +94,10 @@ class JobEvaluator:
             Return ONLY valid JSON in this format without any comments or explanation:
 
             {
-                "keep": boolean (keep = True if it best fits to my target conditions described above),
+                "keep": boolean (keep = True if the job is available worldwide/global, or Asia/APAC, or South Korea),
                 "score": int (0 to 100),
                 "reason": string (short text within 150 characters), 
                 "is_ai_role": boolean,
-                "is_remote_ok": boolean (if available worldwide/global, or Asia/APAC, or South Korea),
                 "manual_check_required": boolean
             }
         """.strip()
@@ -143,7 +142,6 @@ class JobEvaluator:
 
                 # Update objects in Job schema
                 job.is_ai_role = parsed_res["is_ai_role"]
-                job.is_remote_ok = parsed_res["is_remote_ok"]
                 job.keep = parsed_res["keep"]
                 job.manual_check_required = parsed_res['manual_check_required']
                 job.reason = parsed_res['reason']
