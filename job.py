@@ -14,4 +14,4 @@ class Job:
     reason: str = ""
     is_ai_role: Optional[bool] = None
     manual_check_required: bool = False
-    date: Optional[date] = None
+    date: Optional[str] = None
