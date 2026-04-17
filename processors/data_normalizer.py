@@ -1,4 +1,5 @@
 from job import Job
+from utils import datetime_generator
 
 class DataNormalizer:
     """
@@ -15,13 +16,15 @@ class DataNormalizer:
         """
 
         jobs = []
+        current_time = datetime_generator.generate_current_datetime()
 
         for item in self.serp_data + self.exa_data:
             job = Job(
                 title=item.get("title", None),
                 url=item.get("link", None),
                 text=item.get("text", None), #SerpAPI doesn't return text(Job Description) so it requires to web-scrape later on
-                searched_via=item.get("searched_via", None)
+                searched_via=item.get("searched_via", None),
+                date=current_time
             )
 
             jobs.append(job)
