@@ -40,9 +40,6 @@ class JobPipeline:
         serp_queries = query_agent.get_queries()["serp"]
         exa_queries = query_agent.get_queries()["exa"]
 
-        print(f"SERP Len: {len(serp_queries)} | Queries: {serp_queries}")
-        print(f"EXA len: {len(exa_queries)} | Queries: {exa_queries}")
-
 
         ###========== Web Search APIs Flow ==========###
         if not self.SERP_API_KEY:
@@ -59,22 +56,17 @@ class JobPipeline:
         print("Web Search is starting...")
         serp_search_results, exa_search_results = web_search_service.run_web_search()
 
-        print("SERP SEARCH RESULTS: ", serp_search_results)
-        print("EXA SEARCH RESULTS: ", exa_search_results)
-
 
         ###========== Data Normalizer ==========###
         data_normalizer = DataNormalizer(serp_search_results, exa_search_results)
         # all jobs that were finished being normalized
         total_jobs = data_normalizer.normalize_job_data()
-        print("TOTAL JOBS: ", len(total_jobs))
 
 
         ###========== Job Filter ==========###
         job_filter = JobFilter(total_jobs)
         filtered_jobs = job_filter.filter_jobs()
         print(f"Job has been pre-filtered\nResult: {len(filtered_jobs)} Jobs Remaining")
-        print(filtered_jobs)
 
 
         ### ========== Web Scraper ==========###
@@ -85,7 +77,6 @@ class JobPipeline:
         print("Job scraping is in process...")
         scrapped_jobs = web_scraper.web_scrape()
         print(f"NUM OF SCRAPPED JOBS: {len(scrapped_jobs)}")
-        print("SCRAPPED JOBS: ", scrapped_jobs)
 
 
         ###========== Quality Checker ==========###
@@ -112,7 +103,13 @@ class JobPipeline:
 
         ###========== LLM Evaluator ==========###
         job_evaluator = JobEvaluator(final_input_jobs)
-        final_job_results = await job_evaluator.run_job_evaluations()
+        final_job_results: List[Job] = await job_evaluator.run_job_evaluations()
 
         print("FINAL RESULTS: ", final_job_results)
+
+        ###========== Sorting Valid Jobs ==========###
+        valid_final_jobs = [job.keep for job in final_job_results]
+        manual_check_list = [job.manual_check_required for job in final_job_results]
+
+        ###========== Export to Spreadsheet ==========###
 
