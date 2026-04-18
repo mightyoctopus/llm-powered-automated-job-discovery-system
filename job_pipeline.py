@@ -16,6 +16,7 @@ from processors.quality_checker import QualityChecker
 from utils.request_controller import no_adjacent_same_domains
 from services.browser_automation import BrowserAutomation
 from llm_modules.job_evaluator import JobEvaluator
+from services.export_service import ExportService
 
 class JobPipeline:
     """
@@ -25,6 +26,7 @@ class JobPipeline:
     load_dotenv()
     SERP_API_KEY = os.getenv("SERP_API_KEY")
     EXA_API_KEY = os.getenv("EXA_API_KEY")
+    JOB_SHEET_KEY = os.getenv("JOB_SHEET_KEY")
 
     def __init__(self, num_queries=3):
         self.num_queries = num_queries
@@ -37,8 +39,10 @@ class JobPipeline:
         ###========== Search Query Generator Agent Flow ==========###
         print("The main program started running")
         query_agent = QueryGenerator(num_queries=self.num_queries)
-        serp_queries = query_agent.get_queries()["serp"]
-        exa_queries = query_agent.get_queries()["exa"]
+
+        queries = query_agent.get_queries()
+        serp_queries = queries["serp"]
+        exa_queries = queries["exa"]
 
 
         ###========== Web Search APIs Flow ==========###
@@ -75,12 +79,12 @@ class JobPipeline:
 
         web_scraper = WebScraper(shuffled_jobs)
         print("Job scraping is in process...")
-        scrapped_jobs = web_scraper.web_scrape()
-        print(f"NUM OF SCRAPPED JOBS: {len(scrapped_jobs)}")
+        scraped_jobs = web_scraper.web_scrape()
+        print(f"NUM OF SCRAPED JOBS: {len(scraped_jobs)}")
 
 
         ###========== Quality Checker ==========###
-        quality_checker = QualityChecker(scrapped_jobs)
+        quality_checker = QualityChecker(scraped_jobs)
         # mark low_quality = True for jobs with low-quality job description
         marked_jobs = quality_checker.check_jd_quality()
         print("Quality check on job descriptions are complete")
@@ -101,15 +105,19 @@ class JobPipeline:
         # Filter jobs out further to pass them to the final evaluator:
         final_input_jobs = [job for job in all_processed_jobs if job.text and len(job.text.split()) > 150]
 
+
         ###========== LLM Evaluator ==========###
         job_evaluator = JobEvaluator(final_input_jobs)
         final_job_results: List[Job] = await job_evaluator.run_job_evaluations()
 
         print("FINAL RESULTS: ", final_job_results)
 
+
         ###========== Sorting Valid Jobs ==========###
-        valid_final_jobs = [job.keep for job in final_job_results]
-        manual_check_list = [job.manual_check_required for job in final_job_results]
+        valid_final_jobs = [job for job in final_job_results if job.keep]
+        manual_check_list = [job for job in final_job_results if job.manual_check_required]
+
 
         ###========== Export to Spreadsheet ==========###
-
+        exporter = ExportService(self.JOB_SHEET_KEY, valid_final_jobs, manual_check_list)
+        exporter.export_jobs()
