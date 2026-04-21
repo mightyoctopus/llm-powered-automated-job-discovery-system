@@ -139,7 +139,7 @@ Results are exported into structured spreadsheets:
   Generates search queries using an LLM
 
 * **SearchService**
-  Integrates SerpAPI and Exa for job discovery
+  Integrates SerpAPI and Exa for job discovery on the internet
 
 * **DataNormalizer**
   Converts raw results into a unified format
@@ -160,7 +160,7 @@ Results are exported into structured spreadsheets:
   Uses an LLM to evaluate job relevance
 
 * **ExportService**
-  Exports results to Google Sheets
+  Full automation of exporting results to Google Sheets
 
 ---
 
