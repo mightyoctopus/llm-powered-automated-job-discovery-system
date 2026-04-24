@@ -16,7 +16,7 @@ DEMO VIDEO: https://drive.google.com/file/d/1Vl3OONpfAYiVYzdSJE9nN-MDNDZKNqyQ/vi
 
 Finding relevant AI jobs often involves:
 
-* scanning multiple job boards
+* spending hours or longer, scanning multiple job boards and hiring pages across the internet
 * opening and reviewing low-quality listings
 * revisiting the same sources repeatedly
 * manually tracking useful opportunities
@@ -26,9 +26,9 @@ This project addresses that by turning job discovery into a **repeatable, automa
 Instead of manually searching, the system:
 
 * generates targeted search queries
-* collects job listings from multiple sources
+* collects job listings from multiple sources throughout the internet and web indexes
 * filters and processes results
-* evaluates relevance using an LLM
+* evaluates relevance using an LLM evaluation
 * outputs structured results for review
 
 ---
