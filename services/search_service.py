@@ -1,4 +1,5 @@
 import time
+from utils import datetime_generator
 
 class SearchService:
     """
@@ -21,7 +22,7 @@ class SearchService:
         for i, q in enumerate(self.serp_queries):
             try:
                 start = 0
-                num = 100
+                num = 50
                 params = {
                     "engine": "google",
                     "google_domain": "google.com",
@@ -29,6 +30,7 @@ class SearchService:
                     "q": q,
                     "cache": False,
                     "start": start,
+                    "tbs": "qdr:m", # To filter results to past month (for recent job results)
                     "num": num #number of search results in a page
                 }
 
@@ -71,7 +73,8 @@ class SearchService:
                     query=q,
                     type="auto",
                     contents={"highlights": {"max_characters": 4000}},
-                    num_results=100,
+                    num_results=50,
+                    start_published_date=datetime_generator.generate_search_offset_time(), #only returns search results published within the last 5 weeks
                     exclude_domains=["linkedin.com", "indeed.com", "jobs.weekday.works", "internshala.com"],
                     exclude_text=["senior"] #Exclude all results that contain text of senior
                 )
