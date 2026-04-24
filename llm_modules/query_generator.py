@@ -28,7 +28,7 @@ class QueryGenerator:
                 Generate search queries for my job search requirements.
 
                 Requirements:
-                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering including frontier and open-source Hugging Face models.
+                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering, AI/ML engineering or applied ML roles (BUT NOT DATA SCIENCE ROLES).
                 - The role MUST be a remote role available for applicants from the global/worldwide region or ASIA, APAC or any upper regional category that includes South Korea. (Generate most used queries as possible that can include Asia region)
                 - Junior, mid-level, internship are preferred. Senior roles are still acceptable if realistic for a 3-year-experience developer.
                 - {self.num_queries} queries must be generated, formatted in the google search operator style.
@@ -62,7 +62,7 @@ class QueryGenerator:
                 Generate semantic search queries for my job search.
 
                 Requirements:
-                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering including frontier and open-source Hugging Face models.
+                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering, AI/ML engineering or applied ML roles (BUT NOT DATA SCIENCE ROLES).
                 - The role MUST be remote and available globally, worldwide, or in regions including ASIA/APAC (including South Korea).
                 - Junior, mid-level, internship are preferred. Senior roles are acceptable if realistic for a ~3-year-experience developer.
 
