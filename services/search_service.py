@@ -34,10 +34,18 @@ class SearchService:
 
                 response = self.serp_client.search(params)
 
+                # Collect organic
                 all_results.extend([
                     {**item, "searched_via": "serp"}
                     for item in response.get("organic_results", [])
                 ])
+
+                # Collect Google Jobs results (the results from Google Careers)
+                all_results.extend([
+                    {**item, "searched_via": "serp_jobs"}
+                    for item in response.get("jobs_results", [])
+                ])
+
                 print(f"SerpAPI Search Iteration {i + 1} Finished")
                 time.sleep(1)
             except Exception as e:
