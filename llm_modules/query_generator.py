@@ -62,12 +62,11 @@ class QueryGenerator:
                 Generate semantic search queries for my job search.
 
                 Requirements:
-                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering, AI/ML engineering or applied ML roles (BUT NOT DATA SCIENCE ROLES).
+                - I am looking for remote AI engineering roles focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering, AI/ML engineering or applied ML roles (BUT NOT DATA SCIENCE ROLES).
                 - The role MUST be remote and available globally, worldwide, or in regions including ASIA/APAC (including South Korea).
                 - Junior, mid-level, internship are preferred. Senior roles are acceptable if realistic for a ~3-year-experience developer.
 
                 - Queries should be written in natural, human-like language optimized for semantic search (NOT heavy Google operator style).
-                - Do NOT focus only on ATS domains — allow broader discovery including company pages, startup hiring pages, and lesser-known sources.
 
                 - Include strong job-intent signals in natural form:
                   (e.g. "hiring", "job opening", "career opportunity", "looking for", "open role")
@@ -77,7 +76,7 @@ class QueryGenerator:
                   "hiring", "job opening", "open role", "career opportunity", "we are hiring"
 
                 - IMPORTANT: Do NOT over-constrain queries.
-                  Keep each query simple and realistic (1–2 core ideas).
+                  Keep each query simple and realistic (3–4 core ideas).
                   Spread variations across multiple queries instead of stacking conditions.
 
                 - Prioritize recall over strict filtering:
