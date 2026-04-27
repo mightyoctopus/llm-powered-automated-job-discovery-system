@@ -18,6 +18,7 @@ class WebScraper:
     def web_scrape(self) -> List[Job]:
 
         scrapped_jobs = []
+        error_pages = [] # Collect all 404, 410 or request error urls so it can separate them from the group of scrapped urls
         prev_domain = ""
 
         for i, job in enumerate(self.filtered_jobs):
@@ -28,10 +29,30 @@ class WebScraper:
 
                 try:
                     print(f"Job {i} is being scrapped...")
+
+                    # HEAD requests first (initial check for 404 or bad http responses)
+                    try:
+                        head_response = requests.head(
+                            job.url,
+                            allow_redirects=True,
+                            timeout=5
+                        )
+
+                        # Drop immediately if 404, or 410 found
+                        if head_response.status_code in [404, 410]:
+                            print(f"JOB ID {i + 1}: Dropped (dead link {head_response.status_code})\nURL: {job.url}")
+                            error_pages.append(job)
+                            continue
+
+                    except requests.exceptions.RequestException:
+                        print(f"JOB ID {i + 1}: HEAD failed")
+
+                    ### GET request starts from here ###
                     response = requests.get(job.url, timeout=12) # to be safe for slow responses sometimes
 
                     if response.status_code != 200:
                         print(f"JOB ID {i + 1}: Failed with status {response.status_code}\nURL: {job.url}")
+                        scrapped_jobs.append(job) # jobs might fail to be scraped due to 500 or 403(bot blocking) so include this for now for further web scraping with browser automation later on
                     else:
                         soup = BeautifulSoup(response.text, "lxml")
                         text = soup.get_text(separator="\n\n", strip=True)
@@ -40,11 +61,11 @@ class WebScraper:
                             # Assign the scraped text into the text attribute of Job object
                             job.text = text
 
+                        scrapped_jobs.append(job)
+
                 except requests.exceptions.RequestException as e:
                     print(f"JOB ID {i + 1}: Failed to scrape - {e}")
+                    scrapped_jobs.append(job)
 
-
-
-            scrapped_jobs.append(job)
 
         return scrapped_jobs
