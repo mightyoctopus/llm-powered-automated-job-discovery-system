@@ -80,8 +80,11 @@ class SearchService:
                     },
                     num_results=50,
                     start_published_date=datetime_generator.generate_search_offset_time(), #only returns search results published within the last 5 weeks
-                    exclude_domains=["linkedin.com", "indeed.com", "jobs.weekday.works", "internshala.com"],
-                    exclude_text=["senior"] #Exclude all results that contain text of senior
+                    exclude_domains=[
+                        "linkedin.com", "indeed.com", "jobs.weekday.works", "internshala.com",
+                        "jobflarely.liveblog365.com", "hirevector.liveblog365.com",
+                    ],
+                    exclude_text=[]
                 )
                 print(f"Exa Search Iteration {i + 1} Finished")
 
