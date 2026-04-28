@@ -10,9 +10,9 @@ class JobFilter:
     EXCLUDING_DOMAINS = [
         "linkedin.com", "indeed.com", "ziprecruiter.com", "glassdoor.com", "huggingface.co",
         "github.com", "facebook.com", "wellfound.com", "jobs.weekday.works",
-        "medium.com"
+        "medium.com", "reddit.com"
     ]
-    EXCLUDING_URL_SLUG = ["blog", "news", "article", "insights", "press", "media"]
+    EXCLUDING_URL_SLUG = ["blog", "news", "article", "insights", "press", "media", "comments"]
     EXCLUDING_WORDS = ["senior", "head", "lead", "principal", "director", "manager"]
     SITES_For_BROWSER_AUTOMATION = ["workable.com"] # Problematic sites for web-scrapping; needed to pass to the LLM auto-browsing logic to handle
 
