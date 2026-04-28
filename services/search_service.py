@@ -72,7 +72,12 @@ class SearchService:
                 response = self.exa_client.search(
                     query=q,
                     type="auto",
-                    contents={"highlights": {"max_characters": 4000}},
+                    contents={
+                        "highlights": {
+                            "max_characters": 4000,
+                            "query": "job description responsibilities requirements qualifications experience remote work fully remote work from anywhere apply role"
+                        }
+                    },
                     num_results=50,
                     start_published_date=datetime_generator.generate_search_offset_time(), #only returns search results published within the last 5 weeks
                     exclude_domains=["linkedin.com", "indeed.com", "jobs.weekday.works", "internshala.com"],
