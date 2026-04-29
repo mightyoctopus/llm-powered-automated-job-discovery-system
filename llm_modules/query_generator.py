@@ -18,40 +18,51 @@ class QueryGenerator:
         self.num_queries = num_queries
         self._queries = None # to use cached queries as best as possible (to avoid duplicate LLM calls)
 
-
     def build_serpapi_user_prompt(self) -> str:
-        """
-        Build a dynamic user message for LLM to generate search operators that fit for SerpAPI usecase
-        """
-
         return f"""
-                Generate search queries for my job search requirements.
-
+                Generate {self.num_queries} Google search queries for job discovery.
+            
+                Goal:
+                Find remote AI/LLM engineering roles (NOT data science heavy role) focused on:
+                AI agents, agentic systems, RAG, LangChain, LangGraph, LoRA/QLoRA, AI integration, applied ML, LLM engineer, or backend with LLM integration role.
+            
                 Requirements:
-                - I need a remote AI engineering role focused on agentic systems, AI agents, RAG pipelines, LoRA/QLoRA fine-tuning, AI integration, AI-driven applications, and LLM engineering, AI/ML engineering or applied ML roles (BUT NOT DATA SCIENCE ROLES).
-                - The role MUST be a remote role available for applicants from the global/worldwide region or ASIA, APAC or any upper regional category that includes South Korea. (Generate most used queries as possible that can include Asia region)
-                - Junior, mid-level, internship are preferred. Senior roles are still acceptable if realistic for a 3-year-experience developer.
-                - {self.num_queries} queries must be generated, formatted in the google search operator style.
-                - It must avoid to generate search queries that lead to general job boards like LinkedIn, Indeed.com, ziprecruiter.com etc which have none to least global remote job offers. It must be queries that search for companies' direct hiring page or ATS including GreenHouse, Lever, Workable, Ashby, Recuitee, Breezy HR, Zoho Recruit, jobs.smartrecruiters or anything similar to that (ATS) or tech startup job boards that include global remote jobs offers. 
-                - In your queries, include strong job-intent keywords commonly used by companies to focus on REAL JOBS (e.g. "careers", "job openings", "open roles", "jobs", or anything you think is great to get valid search results on job openings.) so that it avoids irrelevant results like blogs, articles, forums, or news pages.
-                - Generate search queries in these formats:
-                  for example, site:boards.greenhouse.io ("AI engineer" OR "LLM" OR "RAG" OR "LangChain" OR "LangGraph" OR "agent") ("APAC" OR "Asia" OR "global" OR "worldwide" OR "timezone overlap")
-                  (it's just an example for your structural reference, but you can use your creativity to generate many random search queries that work the best!!)
-                  IMPORTANT: it has to target one of ATS sites, role title and/or skill names, remote regions(worldwide, global, work from anywhere, or Asia etc), and excluding any words like "senior", "lead", "head", "staff engineer" or anything that implies a senior role. 
-
-                - Output exactly this JSON schema (List[str] in JSON):
-
+                - Roles must be remote and available globally or in Asia/APAC (including South Korea).
+                - Prefer junior to mid-level roles (avoid lead/senior-heavy roles unless realistic for ~3 - 5 years experience).
+                - Target company ATS pages only (e.g., boards.greenhouse.io, jobs.lever.co, ashbyhq.com, workable.com, breezy.hr, smartrecruiters.com or anything that is similar or works great!).
+                - Avoid general job boards (LinkedIn, Indeed, ZipRecruiter, etc.).
+            
+                STRICT QUERY FORMAT:
+                Each query MUST follow this exact structure:
+            
+                site:<ATS_DOMAIN> ("<ROLE_OR_SKILL_1>" OR "<ROLE_OR_SKILL_2>" ... up to 6)
+                ("<REMOTE_REGION_1>" OR "<REMOTE_REGION_2>" ... up to 6)
+                -(<EXCLUDED_1> OR <EXCLUDED_2> ... up to 6)
+                
+                For example:
+                site:boards.greenhouse.io ("AI engineer" OR "LLM" OR "RAG" OR "LangChain" OR "LangGraph" OR "agent") ("APAC" OR "Asia" OR "global" OR "worldwide" OR "timezone overlap") -(lead OR head OR staff OR principal OR director OR 'data scientist') 
+                
+            
+                Rules:
+                - Group 1: role/skill keywords (max 6)
+                - Group 2: remote/location keywords (max 6)
+                - Group 3: exclusion keywords (max 6)
+                - Exclude terms like: lead, head, staff, principal, director, data scientist
+                - Use realistic variations and diversity across queries
+            
+                Output:
+                Return ONLY a JSON array of strings:
+            
                 [
-                    "... exactly {self.num_queries} strings ..."
+                  "... exactly {self.num_queries} queries ..."
                 ]
-
-
+            
                 Format Rules:
-                - Return only raw JSON.
-                - No markdown fences.
-                - No explanation.
-                - Each list must contain exactly {self.num_queries} strings.
-                """.strip()
+                - No markdown
+                - No explanation
+                - Valid JSON only
+                - Exactly {self.num_queries} items
+        """.strip()
 
     def build_exa_user_prompt(self) -> str:
         """
