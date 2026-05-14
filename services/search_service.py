@@ -22,7 +22,7 @@ class SearchService:
         for i, q in enumerate(self.serp_queries):
             try:
                 start = 0
-                num = 50
+                num = 30
                 params = {
                     "engine": "google",
                     "google_domain": "google.com",
