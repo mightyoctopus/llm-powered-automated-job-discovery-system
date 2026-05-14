@@ -28,26 +28,22 @@ class QueryGenerator:
             
                 Requirements:
                 - Roles must be remote and available globally or in Asia/APAC (including South Korea).
-                - Prefer junior to mid-level roles (avoid lead/senior-heavy roles unless realistic for ~3 - 5 years experience).
                 - Target company ATS pages only (e.g., boards.greenhouse.io, jobs.lever.co, ashbyhq.com, workable.com, breezy.hr, smartrecruiters.com, myworkdayjobs.com or anything that is similar or works great!).
                 - Avoid general job boards (LinkedIn, Indeed, ZipRecruiter, etc.).
             
                 STRICT QUERY FORMAT:
                 Each query MUST follow this exact structure:
             
-                site:<ATS_DOMAIN> ("<ROLE_OR_SKILL_1>" OR "<ROLE_OR_SKILL_2>" ... up to 6)
-                ("<REMOTE_REGION_1>" OR "<REMOTE_REGION_2>" ... up to 6)
-                -(<EXCLUDED_1> OR <EXCLUDED_2> ... up to 6)
+                site:<ATS_DOMAIN> ("<ROLE_OR_SKILL_1>" OR "<ROLE_OR_SKILL_2>" ... up to 5)
+                ("<REMOTE_REGION_1>" OR "<REMOTE_REGION_2>" ... up to 5)
                 
                 For example:
                 site:boards.greenhouse.io ("AI engineer" OR "LLM" OR "RAG" OR "LangChain" OR "LangGraph" OR "agent") ("APAC" OR "Asia" OR "global" OR "worldwide" OR "timezone overlap") -(lead OR head OR staff OR principal OR director OR 'data scientist') 
                 
             
                 Rules:
-                - Group 1: role/skill keywords (max 6)
-                - Group 2: remote/location keywords (max 6)
-                - Group 3: exclusion keywords (max 6)
-                - Exclude terms like: lead, head, staff, principal, director, data scientist
+                - Group 1: role/skill keywords (max 5)
+                - Group 2: remote/location keywords (max 5)
                 - Use realistic variations and diversity across queries
             
                 Output:
