@@ -29,7 +29,7 @@ class QueryGenerator:
                 Requirements:
                 - Roles must be remote and available globally or in Asia/APAC (including South Korea).
                 - Prefer junior to mid-level roles (avoid lead/senior-heavy roles unless realistic for ~3 - 5 years experience).
-                - Target company ATS pages only (e.g., boards.greenhouse.io, jobs.lever.co, ashbyhq.com, workable.com, breezy.hr, smartrecruiters.com or anything that is similar or works great!).
+                - Target company ATS pages only (e.g., boards.greenhouse.io, jobs.lever.co, ashbyhq.com, workable.com, breezy.hr, smartrecruiters.com, myworkdayjobs.com or anything that is similar or works great!).
                 - Avoid general job boards (LinkedIn, Indeed, ZipRecruiter, etc.).
             
                 STRICT QUERY FORMAT:
