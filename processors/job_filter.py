@@ -10,7 +10,7 @@ class JobFilter:
     EXCLUDING_DOMAINS = [
         "linkedin.com", "indeed.com", "ziprecruiter.com", "glassdoor.com", "huggingface.co",
         "github.com", "facebook.com", "wellfound.com", "jobs.weekday.works",
-        "medium.com", "reddit.com"
+        "medium.com", "reddit.com", "youtube.com"
     ]
     EXCLUDING_URL_SLUG = ["blog", "news", "article", "insights", "press", "media", "comments"]
     EXCLUDING_WORDS = ["senior", "head", "lead", "principal", "director", "manager"]
