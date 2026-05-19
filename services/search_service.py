@@ -54,6 +54,7 @@ class SearchService:
                 print(f"[SerpAPI ERROR] Search Iteration {i + 1} failed: {e}")
                 continue
 
+        print("SERP URL RESULTS: ", all_results)
         return all_results
 
 
@@ -69,14 +70,16 @@ class SearchService:
 
         for i, q in enumerate(self.exa_queries):
             try:
-                response = self.exa_client.search(
+                response = self.exa_client.search_and_contents(
                     query=q,
                     type="auto",
                     contents={
                         "highlights": {
                             "max_characters": 4000,
                             "query": "job description responsibilities requirements qualifications experience remote work fully remote work from anywhere apply role"
-                        }
+                        },
+                        "livecrawl": "fallback", #Implement this for live crawling at a moderate level (avoiding excessive live crawl for cost saving)
+                        "filterEmptyResults": True,
                     },
                     num_results=50,
                     start_published_date=datetime_generator.generate_search_offset_time(), #only returns search results published within the last 5 weeks
